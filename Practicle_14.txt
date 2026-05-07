@@ -1,0 +1,28 @@
+import csv
+
+temp_sum = 0
+dew_sum = 0
+wind_sum = 0
+count = 0
+
+with open(r"C:\Users\STUDENT\Desktop\weather_project\sample_weather.txt", "r") as file:
+    reader = csv.reader(file)
+    next(reader)  # skip header
+
+    for row in reader:
+        try:
+            temp = float(row[1])
+            dew = float(row[2])
+            wind = float(row[3])
+
+            temp_sum += temp
+            dew_sum += dew
+            wind_sum += wind
+            count += 1
+
+        except:
+            continue
+
+print("Avg Temperature:", temp_sum / count)
+print("Avg Dew Point:", dew_sum / count)
+print("Avg Wind Speed:", wind_sum / count)
