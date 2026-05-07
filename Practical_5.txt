@@ -1,0 +1,34 @@
+Practical 3
+import pandas as pd
+import seaborn as sns
+
+# Load dataset
+df = sns.load_dataset('iris')
+
+# -------------------------------
+# 1. Summary statistics grouped by categorical variable
+# -------------------------------
+group = df.groupby('species')['sepal_length']
+
+print("Mean:\n", group.mean())
+print("Median:\n", group.median())
+print("Minimum:\n", group.min())
+print("Maximum:\n", group.max())
+print("Standard Deviation:\n", group.std())
+
+# -------------------------------
+# 2. Convert categorical to numeric list
+# -------------------------------
+num_list = df['species'].map({
+    'setosa':0,
+    'versicolor':1,
+    'virginica':2
+}).tolist()
+
+print("Numeric List:\n", num_list)
+
+# -------------------------------
+# 3. Statistical details for each species
+# -------------------------------
+print("\nFull Statistics for each species:\n")
+print(df.groupby('species').describe())
