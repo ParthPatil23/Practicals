@@ -1,0 +1,70 @@
+# ----------------------------------------
+# 1. Import libraries
+# ----------------------------------------
+import nltk
+from nltk.tokenize import word_tokenize
+from nltk.corpus import stopwords
+from nltk.stem import PorterStemmer, WordNetLemmatizer
+from nltk import pos_tag
+from sklearn.feature_extraction.text import TfidfVectorizer
+
+# Download (run once)
+nltk.download('punkt')
+nltk.download('stopwords')
+nltk.download('wordnet')
+nltk.download('averaged_perceptron_tagger')
+
+# ----------------------------------------
+# 2. Sample document
+# ----------------------------------------
+text = "Students are studying machine learning and they are learning fast."
+
+print("Original Text:\n", text)
+
+# ----------------------------------------
+# 3. Tokenization
+# ----------------------------------------
+tokens = word_tokenize(text)
+print("\nTokens:\n", tokens)
+
+# ----------------------------------------
+# 4. Stopwords Removal
+# ----------------------------------------
+stop_words = set(stopwords.words('english'))
+filtered_tokens = [w for w in tokens if w.lower() not in stop_words]
+print("\nAfter Stopword Removal:\n", filtered_tokens)
+
+# ----------------------------------------
+# 5. Stemming
+# ----------------------------------------
+ps = PorterStemmer()
+stemmed = [ps.stem(w) for w in filtered_tokens]
+print("\nStemmed Words:\n", stemmed)
+
+# ----------------------------------------
+# 6. Lemmatization
+# ----------------------------------------
+lemmatizer = WordNetLemmatizer()
+lemmatized = [lemmatizer.lemmatize(w) for w in filtered_tokens]
+print("\nLemmatized Words:\n", lemmatized)
+
+# ----------------------------------------
+# 7. POS Tagging
+# ----------------------------------------
+pos = pos_tag(filtered_tokens)
+print("\nPOS Tags:\n", pos)
+
+# ----------------------------------------
+# 8. TF-IDF Representation
+# ----------------------------------------
+docs = [
+    "Students are studying machine learning",
+    "Machine learning is very useful",
+    "Students learn quickly"
+]
+
+vectorizer = TfidfVectorizer()
+tfidf = vectorizer.fit_transform(docs)
+
+print("\nTF-IDF Feature Names:\n", vectorizer.get_feature_names_out())
+print("\nTF-IDF Matrix:\n", tfidf.toarray())
