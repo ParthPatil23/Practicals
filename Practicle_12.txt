@@ -1,0 +1,74 @@
+# ----------------------------------------
+# 1. Import libraries
+# ----------------------------------------
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+# ----------------------------------------
+# 2. Load dataset
+# ----------------------------------------
+df = sns.load_dataset('iris')
+
+print("First 5 rows:\n", df.head())
+
+# ----------------------------------------
+# 3. Features and their types
+# ----------------------------------------
+print("\nData Types:\n", df.dtypes)
+
+print("\nFeature Description:")
+for col in df.columns:
+    if df[col].dtype == 'object':
+        print(col, "-> Nominal (Categorical)")
+    else:
+        print(col, "-> Numeric")
+
+# ----------------------------------------
+# 4. Histogram for each feature
+# ----------------------------------------
+df.hist(figsize=(10,8))
+plt.suptitle("Histograms of Iris Features")
+plt.show()
+
+# ----------------------------------------
+# 5. Boxplot for each feature
+# ----------------------------------------
+plt.figure(figsize=(10,8))
+
+plt.subplot(2,2,1)
+sns.boxplot(y=df['sepal_length'])
+plt.title("Sepal Length")
+
+plt.subplot(2,2,2)
+sns.boxplot(y=df['sepal_width'])
+plt.title("Sepal Width")
+
+plt.subplot(2,2,3)
+sns.boxplot(y=df['petal_length'])
+plt.title("Petal Length")
+
+plt.subplot(2,2,4)
+sns.boxplot(y=df['petal_width'])
+plt.title("Petal Width")
+
+plt.suptitle("Boxplots of Iris Features")
+plt.show()
+
+# ----------------------------------------
+# 6. Subplot demonstration (histograms manually)
+# ----------------------------------------
+fig, axes = plt.subplots(2,2, figsize=(10,8))
+
+axes[0,0].hist(df['sepal_length'])
+axes[0,1].hist(df['sepal_width'])
+axes[1,0].hist(df['petal_length'])
+axes[1,1].hist(df['petal_width'])
+
+axes[0,0].set_title("Sepal Length")
+axes[0,1].set_title("Sepal Width")
+axes[1,0].set_title("Petal Length")
+axes[1,1].set_title("Petal Width")
+
+plt.tight_layout()
+plt.show()
