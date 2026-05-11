@@ -1,0 +1,147 @@
+# -------------------- Simple Kruskal's MST --------------------
+
+def find(parent, x):
+
+    while parent[x] != x:
+        x = parent[x]
+
+    return x
+
+
+def kruskal(edges):
+
+    parent = {}
+
+    # Create parent for each vertex
+    for u, v, w in edges:
+
+        parent[u] = u
+        parent[v] = v
+
+    # Sort edges by weight
+    edges.sort(key=lambda x: x[2])
+
+    mst = []
+    total = 0
+
+    for u, v, w in edges:
+
+        root_u = find(parent, u)
+        root_v = find(parent, v)
+
+        # If cycle is not formed
+        if root_u != root_v:
+
+            mst.append((u, v, w))
+            total += w
+
+            # Union
+            parent[root_v] = root_u
+
+    return mst, total
+
+
+# -------------------- Dijkstra's Algorithm --------------------
+
+import heapq
+
+def dijkstra(graph, start):
+
+    distance = {}
+
+    for vertex in graph:
+        distance[vertex] = float('inf')
+
+    distance[start] = 0
+
+    pq = [(0, start)]
+
+    while pq:
+
+        dist, node = heapq.heappop(pq)
+
+        for neighbor, weight in graph[node]:
+
+            new_dist = dist + weight
+
+            if new_dist < distance[neighbor]:
+
+                distance[neighbor] = new_dist
+
+                heapq.heappush(pq, (new_dist, neighbor))
+
+    return distance
+
+
+# -------------------- Main Program --------------------
+
+print("1. Kruskal's MST")
+print("2. Dijkstra's Algorithm")
+
+choice = int(input("Enter your choice: "))
+
+
+# -------------------- Kruskal --------------------
+
+if choice == 1:
+
+    n = int(input("Enter number of edges: "))
+
+    edges = []
+
+    print("Enter edges (u v weight):")
+
+    for _ in range(n):
+
+        u, v, w = input().split()
+
+        w = int(w)
+
+        edges.append((u, v, w))
+
+    mst, total = kruskal(edges)
+
+    print("\nEdges in MST:")
+
+    for u, v, w in mst:
+        print(u, "--", v, "=", w)
+
+    print("Total Cost =", total)
+
+
+# -------------------- Dijkstra --------------------
+
+elif choice == 2:
+
+    n = int(input("Enter number of edges: "))
+
+    graph = {}
+
+    print("Enter edges (u v weight):")
+
+    for _ in range(n):
+
+        u, v, w = input().split()
+
+        w = int(w)
+
+        if u not in graph:
+            graph[u] = []
+
+        if v not in graph:
+            graph[v] = []
+
+        graph[u].append((v, w))
+        graph[v].append((u, w))   # Remove for directed graph
+
+    start = input("Enter source vertex: ")
+
+    distance = dijkstra(graph, start)
+
+    print("\nShortest Distances:")
+
+    for vertex in distance:
+        print(start, "to", vertex, "=", distance[vertex])
+
+else:
+    print("Invalid Choice")

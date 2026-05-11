@@ -1,0 +1,119 @@
+# Constraint Satisfaction Problem (CSP)
+# N-Queens using Backtracking and Branch & Bound
+
+def print_board(board, n):
+    print("\nSolution Board:\n")
+    for i in range(n):
+        for j in range(n):
+            if board[i] == j:
+                print("Q", end=" ")
+            else:
+                print(".", end=" ")
+        print()
+
+
+# ---------------- BACKTRACKING ----------------
+def is_safe(board, row, col, n):
+
+    # Check previous rows
+    for i in range(row):
+
+        # Same column
+        if board[i] == col:
+            return False
+
+        # Diagonal check
+        if abs(board[i] - col) == abs(i - row):
+            return False
+
+    return True
+
+
+def solve_backtracking(board, row, n):
+
+    # All queens placed
+    if row == n:
+        return True
+
+    # Try all columns
+    for col in range(n):
+
+        if is_safe(board, row, col, n):
+
+            board[row] = col
+
+            # Recursive call
+            if solve_backtracking(board, row + 1, n):
+                return True
+
+            # Backtrack
+            board[row] = -1
+
+    return False
+
+
+# ---------------- BRANCH AND BOUND ----------------
+def solve_branch_bound(board, row, n, cols, diag1, diag2):
+
+    # All queens placed
+    if row == n:
+        return True
+
+    for col in range(n):
+
+        # Check if column and diagonals are free
+        if not cols[col] and not diag1[row - col + n - 1] and not diag2[row + col]:
+
+            board[row] = col
+
+            cols[col] = True
+            diag1[row - col + n - 1] = True
+            diag2[row + col] = True
+
+            # Recursive call
+            if solve_branch_bound(board, row + 1, n, cols, diag1, diag2):
+                return True
+
+            # Backtrack
+            board[row] = -1
+            cols[col] = False
+            diag1[row - col + n - 1] = False
+            diag2[row + col] = False
+
+    return False
+
+
+# ---------------- MAIN PROGRAM ----------------
+
+n = int(input("Enter value of N: "))
+
+print("\nChoose Method")
+print("1. Backtracking")
+print("2. Branch and Bound")
+
+choice = int(input("Enter choice: "))
+
+board = [-1] * n
+
+if choice == 1:
+
+    if solve_backtracking(board, 0, n):
+        print("\nSolution found using Backtracking")
+        print_board(board, n)
+    else:
+        print("No solution exists")
+
+elif choice == 2:
+
+    cols = [False] * n
+    diag1 = [False] * (2 * n - 1)
+    diag2 = [False] * (2 * n - 1)
+
+    if solve_branch_bound(board, 0, n, cols, diag1, diag2):
+        print("\nSolution found using Branch and Bound")
+        print_board(board, n)
+    else:
+        print("No solution exists")
+
+else:
+    print("Invalid Choice")

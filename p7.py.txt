@@ -1,0 +1,102 @@
+import heapq
+
+# ---------------- Prim's Algorithm ----------------
+def prim(graph, start):
+    visited = set()
+    heap = [(0, start, None)]
+
+    mst = []
+    cost = 0
+
+    while heap:
+        weight, node, parent = heapq.heappop(heap)
+
+        if node not in visited:
+            visited.add(node)
+            cost += weight
+
+            if parent is not None:
+                mst.append((parent, node, weight))
+
+            for neighbor, w in graph[node]:
+                if neighbor not in visited:
+                    heapq.heappush(heap, (w, neighbor, node))
+
+    return mst, cost
+
+
+# ---------------- Kruskal's Algorithm ----------------
+def find(parent, node):
+    if parent[node] != node:
+        parent[node] = find(parent, parent[node])
+    return parent[node]
+
+
+def union(parent, rank, u, v):
+    ru = find(parent, u)
+    rv = find(parent, v)
+
+    if ru != rv:
+        if rank[ru] > rank[rv]:
+            parent[rv] = ru
+        elif rank[ru] < rank[rv]:
+            parent[ru] = rv
+        else:
+            parent[rv] = ru
+            rank[ru] += 1
+
+
+def kruskal(nodes, edges):
+    parent = {n: n for n in nodes}
+    rank = {n: 0 for n in nodes}
+
+    edges.sort(key=lambda x: x[2])
+
+    mst = []
+    cost = 0
+
+    for u, v, w in edges:
+        if find(parent, u) != find(parent, v):
+            union(parent, rank, u, v)
+
+            mst.append((u, v, w))
+            cost += w
+
+    return mst, cost
+
+
+# ---------------- Main Program ----------------
+
+nodes = input("Enter node names: ").split()
+
+graph = {node: [] for node in nodes}
+edges = []
+
+e = int(input("Enter number of edges: "))
+
+print("Enter edges (u v weight):")
+
+for i in range(e):
+    u, v, w = input().split()
+    w = int(w)
+
+    graph[u].append((v, w))
+    graph[v].append((u, w))
+
+    edges.append((u, v, w))
+
+start = input("Enter starting node for Prim's: ")
+
+# Prim's Output
+mst, cost = prim(graph, start)
+
+print("\nPrim's MST:")
+print(mst)
+print("Total Cost:", cost)
+
+# Kruskal's Output
+mst, cost = kruskal(nodes, edges)
+
+print("\nKruskal's MST:")
+print(mst)
+print("Total Cost:", cost)

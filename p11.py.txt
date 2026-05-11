@@ -1,0 +1,33 @@
+# Expert System for Employee Performance Evaluation
+
+print("=== Employee Performance Evaluation System ===")
+
+# Taking input from user
+name = input("Enter Employee Name: ")
+
+attendance = int(input("Enter Attendance Percentage: "))
+projects = int(input("Enter Number of Projects Completed: "))
+rating = float(input("Enter Manager Rating (out of 10): "))
+
+# Expert system rules
+if attendance >= 90 and projects >= 5 and rating >= 8:
+    performance = "Excellent"
+    suggestion = "Eligible for Promotion and Bonus"
+
+elif attendance >= 75 and projects >= 3 and rating >= 6:
+    performance = "Good"
+    suggestion = "Performance is Satisfactory"
+
+elif attendance >= 60 and projects >= 2 and rating >= 5:
+    performance = "Average"
+    suggestion = "Needs Improvement"
+
+else:
+    performance = "Poor"
+    suggestion = "Performance Warning Required"
+
+# Display result
+print("\n===== Evaluation Result =====")
+print("Employee Name :", name)
+print("Performance   :", performance)
+print("Suggestion    :", suggestion)

@@ -1,0 +1,151 @@
+import heapq
+
+# Goal State
+goal = [
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 0]
+]
+
+
+# Heuristic Function (Misplaced Tiles)
+def heuristic(state):
+
+    count = 0
+
+    for i in range(3):
+        for j in range(3):
+
+            if state[i][j] != 0 and state[i][j] != goal[i][j]:
+                count += 1
+
+    return count
+
+
+# Find blank space position
+def find_blank(state):
+
+    for i in range(3):
+        for j in range(3):
+
+            if state[i][j] == 0:
+                return i, j
+
+
+# Convert list to tuple (for visited set)
+def to_tuple(state):
+
+    return tuple(tuple(row) for row in state)
+
+
+# Generate next possible states
+def generate_states(state):
+
+    new_states = []
+
+    x, y = find_blank(state)
+
+    moves = [
+        (-1, 0),  # Up
+        (1, 0),   # Down
+        (0, -1),  # Left
+        (0, 1)    # Right
+    ]
+
+    for dx, dy in moves:
+
+        nx = x + dx
+        ny = y + dy
+
+        if 0 <= nx < 3 and 0 <= ny < 3:
+
+            # Copy current state
+            temp = [row[:] for row in state]
+
+            # Swap blank tile
+            temp[x][y], temp[nx][ny] = temp[nx][ny], temp[x][y]
+
+            new_states.append(temp)
+
+    return new_states
+
+
+# Print puzzle
+def print_state(state):
+
+    for row in state:
+        print(row)
+
+    print()
+
+
+# A* Algorithm
+def astar(start):
+
+    pq = []
+
+    g = 0
+    h = heuristic(start)
+
+    heapq.heappush(pq, (g + h, g, start))
+
+    visited = set()
+
+    while pq:
+
+        f, g, current = heapq.heappop(pq)
+
+        print("Current State:")
+        print_state(current)
+
+        # Goal Check
+        if current == goal:
+            return current
+
+        visited.add(to_tuple(current))
+
+        # Generate Children
+        for next_state in generate_states(current):
+
+            if to_tuple(next_state) not in visited:
+
+                g_new = g + 1
+                h_new = heuristic(next_state)
+
+                f_new = g_new + h_new
+
+                heapq.heappush(pq, (f_new, g_new, next_state))
+
+    return None
+
+
+# Main Function
+def main():
+
+    print("Enter the 8 Puzzle Initial State")
+    print("Use 0 for blank space\n")
+
+    start = []
+
+    for i in range(3):
+
+        row = list(map(int, input(f"Enter row {i+1}: ").split()))
+
+        start.append(row)
+
+    print("\nInitial State:")
+    print_state(start)
+
+    solution = astar(start)
+
+    if solution:
+
+        print("Goal State Reached:")
+        print_state(solution)
+
+    else:
+        print("No Solution Found")
+
+
+if __name__ == "__main__":
+    main()

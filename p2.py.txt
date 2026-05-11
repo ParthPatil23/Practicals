@@ -1,0 +1,47 @@
+# Breadth First Search (BFS) using Undirected Graph
+# Taking input from user
+
+from collections import deque
+
+# Input number of vertices and edges
+n = int(input("Enter number of vertices: "))
+e = int(input("Enter number of edges: "))
+
+graph = {}
+
+# Create graph
+for i in range(n):
+    vertex = input("Enter vertex name: ")
+    graph[vertex] = []
+
+# Input edges
+print("Enter edges (vertex1 vertex2):")
+for i in range(e):
+    v1, v2 = input().split()
+
+    # Undirected graph
+    graph[v1].append(v2)
+    graph[v2].append(v1)
+
+# BFS Function
+def bfs(start):
+    visited = set()
+    queue = deque()
+
+    visited.add(start)
+    queue.append(start)
+
+    while queue:
+        vertex = queue.popleft()
+        print(vertex, end=" ")
+
+        for neighbor in graph[vertex]:
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append(neighbor)
+
+# Starting vertex
+start = input("Enter starting vertex: ")
+
+print("BFS Traversal:")
+bfs(start)

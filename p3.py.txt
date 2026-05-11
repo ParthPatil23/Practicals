@@ -1,0 +1,104 @@
+import heapq
+
+# Check if queens attack each other
+def attacks(state):
+    count = 0
+    n = len(state)
+
+    for i in range(n):
+        for j in range(i + 1, n):
+
+            # Same column
+            if state[i] == state[j]:
+                count += 1
+
+            # Same diagonal
+            elif abs(state[i] - state[j]) == abs(i - j):
+                count += 1
+
+    return count
+
+
+# A* Algorithm
+def astar(n):
+
+    # Initial state: all queens in column 0
+    start = [0] * n
+
+    # Priority Queue
+    pq = []
+
+    # f(n), g(n), state
+    heapq.heappush(pq, (attacks(start), 0, start))
+
+    visited = set()
+
+    while pq:
+
+        f, g, state = heapq.heappop(pq)
+
+        print("Current State:", state, "Heuristic:", attacks(state))
+
+        # Goal state
+        if attacks(state) == 0:
+            return state
+
+        visited.add(tuple(state))
+
+        # Generate next states
+        for row in range(n):
+            for col in range(n):
+
+                if state[row] != col:
+
+                    new_state = state.copy()
+                    new_state[row] = col
+
+                    if tuple(new_state) not in visited:
+
+                        h = attacks(new_state)
+                        g_new = g + 1
+                        f_new = g_new + h
+
+                        heapq.heappush(pq, (f_new, g_new, new_state))
+
+    return None
+
+
+# Print board
+def print_board(state):
+
+    n = len(state)
+
+    print("\nSolution Board:\n")
+
+    for i in range(n):
+        for j in range(n):
+
+            if state[i] == j:
+                print("Q", end=" ")
+            else:
+                print(".", end=" ")
+
+        print()
+
+
+# Main Function
+def main():
+
+    n = int(input("Enter number of Queens: "))
+
+    solution = astar(n)
+
+    if solution:
+        print("\nSolution Found:")
+        print(solution)
+
+        print_board(solution)
+
+    else:
+        print("No Solution Exists")
+
+
+if __name__ == "__main__":
+    main()

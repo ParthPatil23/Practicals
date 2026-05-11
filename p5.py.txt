@@ -1,0 +1,84 @@
+# Greedy Algorithms:
+# 1. Selection Sort
+# 2. Minimum Spanning Tree using Prim's Algorithm
+
+# ---------------- SELECTION SORT ----------------
+
+def selection_sort(arr):
+    n = len(arr)
+
+    for i in range(n):
+        min_index = i
+
+        for j in range(i + 1, n):
+            if arr[j] < arr[min_index]:
+                min_index = j
+
+        # Swap
+        arr[i], arr[min_index] = arr[min_index], arr[i]
+
+    return arr
+
+
+# ---------------- PRIM'S MST ----------------
+
+def prim_mst(graph, n):
+    INF = 9999999
+
+    selected = [False] * n
+    selected[0] = True
+
+    edge_count = 0
+    total_cost = 0
+
+    print("\nEdges in Minimum Spanning Tree:")
+
+    while edge_count < n - 1:
+
+        minimum = INF
+        x = 0
+        y = 0
+
+        for i in range(n):
+            if selected[i]:
+                for j in range(n):
+                    if (not selected[j]) and graph[i][j]:
+                        if minimum > graph[i][j]:
+                            minimum = graph[i][j]
+                            x = i
+                            y = j
+
+        print(f"{x} - {y} : {graph[x][y]}")
+
+        total_cost += graph[x][y]
+        selected[y] = True
+        edge_count += 1
+
+    print("Total Cost =", total_cost)
+
+
+# ---------------- MAIN PROGRAM ----------------
+
+print("----- Selection Sort -----")
+
+numbers = list(map(int, input("Enter numbers separated by space: ").split()))
+
+sorted_array = selection_sort(numbers)
+
+print("Sorted Array:")
+print(sorted_array)
+
+
+print("\n----- Minimum Spanning Tree (Prim's Algorithm) -----")
+
+n = int(input("Enter number of vertices: "))
+
+graph = []
+
+print("Enter adjacency matrix:")
+
+for i in range(n):
+    row = list(map(int, input().split()))
+    graph.append(row)
+
+prim_mst(graph, n)

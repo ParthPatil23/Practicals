@@ -1,0 +1,55 @@
+# Elementary Chatbot for Customer Interaction
+# Application: Online Shopping Support Chatbot
+
+print("===================================")
+print(" Welcome to ShopEasy Chatbot ")
+print("===================================")
+
+name = input("Enter your name: ")
+print(f"\nHello {name}! How can I help you today?")
+
+while True:
+
+    print("\nChoose an option:")
+    print("1. Order Status")
+    print("2. Return Product")
+    print("3. Product Information")
+    print("4. Payment Issues")
+    print("5. Customer Care")
+    print("6. Exit")
+
+    choice = input("Enter your choice: ")
+
+    # Order Status
+    if choice == "1":
+        order_id = input("Enter your Order ID: ")
+        print(f"Order {order_id} is currently out for delivery.")
+
+    # Return Product
+    elif choice == "2":
+        product = input("Enter product name: ")
+        print(f"Return request for '{product}' has been registered successfully.")
+
+    # Product Information
+    elif choice == "3":
+        product = input("Enter product name: ")
+        print(f"{product} is available with exciting discounts and free delivery.")
+
+    # Payment Issues
+    elif choice == "4":
+        print("Payment issue detected.")
+        print("Please wait 24 hours or contact your bank.")
+
+    # Customer Care
+    elif choice == "5":
+        print("Customer Care Number: 1800-123-456")
+        print("Email: support@shopeasy.com")
+
+    # Exit
+    elif choice == "6":
+        print(f"\nThank you for visiting ShopEasy, {name}!")
+        print("Have a great day!")
+        break
+
+    else:
+        print("Invalid choice. Please try again.")

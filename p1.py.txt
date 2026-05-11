@@ -1,0 +1,40 @@
+# Depth First Search (DFS) using Recursion
+# Undirected Graph with User Input
+
+# Function for DFS traversal
+def dfs(vertex, visited, graph):
+    visited.add(vertex)
+    print(vertex, end=" ")
+
+    # Visit all adjacent vertices
+    for neighbor in graph[vertex]:
+        if neighbor not in visited:
+            dfs(neighbor, visited, graph)
+
+# Input number of vertices and edges
+n = int(input("Enter number of vertices: "))
+e = int(input("Enter number of edges: "))
+
+graph = {}
+
+# Initialize graph
+for i in range(n):
+    vertex = input("Enter vertex name: ")
+    graph[vertex] = []
+
+# Input edges
+print("Enter edges (vertex1 vertex2):")
+for i in range(e):
+    v1, v2 = input().split()
+
+    # Since graph is undirected
+    graph[v1].append(v2)
+    graph[v2].append(v1)
+
+# Starting vertex for DFS
+start = input("Enter starting vertex: ")
+
+visited = set()
+
+print("DFS Traversal:")
+dfs(start, visited, graph)
